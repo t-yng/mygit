@@ -1,7 +1,6 @@
 # MyGit
 
-This is study repository of git tool architecture for me.  
-This tool is written by typescript.
+This is study repository of tool git architecture for me.
 
 ## Installing
 ```
