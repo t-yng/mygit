@@ -1,5 +1,6 @@
 import Blob from './blob';
 
 export const createBlob = (file: string): Blob => {
-  return Blob.create(file);
+  const blob = Blob.create(file);
+  return blob;
 }
