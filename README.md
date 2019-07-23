@@ -1,5 +1,8 @@
 # MyGit
 
+This is study repository of git tool architecture for me.  
+This tool is written by typescript.
+
 ## Installing
 ```
 $ npm install
