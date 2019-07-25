@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as zlib from 'zlib';
 
-export default abstract class MyGitObject {
+export default class MyGitObject {
     private _hash: string;
 
     constructor(hash: string) {
