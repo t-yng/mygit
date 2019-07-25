@@ -1,6 +1,7 @@
 import Blob from './blob';
 import Tree from './tree';
 import Commit from './commit';
+import { Refs } from '../refs';
 import { Index, IndexNode } from '../index-file';
 
 export const createBlob = (file: string): Blob => {
@@ -30,11 +31,17 @@ const createTree = (children: IndexNode[]): Tree => {
 }
 
 export const createCommit = (index: Index, message: string): Commit => {
+  const refs = new Refs();
   const tree = createTree(index.toTree().root.children);
+  const parent = refs.parentCommitHash;
+
   const commit = Commit.create({
     tree: tree.hash,
-    message: message
+    parent: parent,
+    message: message,
   });
+
+  refs.update(commit.hash);
 
   return commit;
 }

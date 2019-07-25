@@ -15,8 +15,14 @@ export default class Commit extends MyGitObject {
     static create = (meta: Meta): Commit => {
         const content = [
             `tree ${meta.tree}`,
+            (meta.parent != null) ? `parent ${meta.parent}` : '',
+            (meta.author != null) ? `author ${meta.author}` : '',
+            (meta.committer != null) ? `commiter ${meta.committer}` : '',
             `${os.EOL}${meta.message}`
-        ].join(os.EOL);
+        ]
+        .filter( str => str !== '')
+        .join(os.EOL);
+
         const header = `commit ${content.length}\0`;
         const store = header + content;
         const hash = sha1(store);
