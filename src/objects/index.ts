@@ -1,18 +1,7 @@
-import * as path from 'path';
 import Blob from './blob';
 import Tree from './tree';
 import Commit from './commit';
-import { Index, IndexEntry } from '../index-file';
-
-interface IndexNode {
-  name: string,
-  hash?: string,
-  children: IndexNode[]
-}
-
-interface IndexTree {
-  root: IndexNode
-}
+import { Index, IndexNode } from '../index-file';
 
 export const createBlob = (file: string): Blob => {
   const blob = Blob.create(file);
@@ -41,54 +30,11 @@ const createTree = (children: IndexNode[]): Tree => {
 }
 
 export const createCommit = (index: Index, message: string): Commit => {
-  const indexTree = indexEntriesToTree(index.entries);
-  const tree = createTree(indexTree.root.children);
+  const tree = createTree(index.toTree().root.children);
   const commit = Commit.create({
     tree: tree.hash,
     message: message
   });
 
   return commit;
-}
-
-const indexEntriesToTree = (entries: IndexEntry[]): IndexTree => {
-  let tree: IndexTree = {
-    root: {
-      name: 'root',
-      children: []
-    }
-  }
-
-  entries.forEach( entry => {
-    let current = tree.root;
-    const parts = entry.file.split(path.sep);
-
-    parts.forEach( (part, i) => {
-      if(current.children == null) current.children = [];
-
-      if(i === parts.length - 1) {
-        current.children.push({
-          name: part,
-          hash: entry.hash,
-          children: []
-        });
-
-        return;
-      }
-
-      const exists = current.children.find( (child: any) => child.name === part);
-      if(exists) {
-        current = exists
-      } else {
-        const newEntry = {
-          name: part,
-          children: []
-        };
-        current.children.push(newEntry);
-        current = newEntry;
-      }
-    });
-  });
-
-  return tree;
 }

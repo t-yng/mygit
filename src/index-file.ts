@@ -7,6 +7,16 @@ export interface IndexEntry {
     file: string
 }
 
+export interface IndexNode {
+    name: string,
+    hash?: string,
+    children: IndexNode[]
+}
+
+export interface IndexTree {
+    root: IndexNode
+}
+
 export class Index {
     private _file: string;
 
@@ -23,6 +33,50 @@ export class Index {
             const [ hash, file ] = line.split(' ');
             return { hash, file };
         });
+    }
+
+    toTree = (): IndexTree => {
+        const entries = this.entries;
+
+        let tree: IndexTree = {
+            root: {
+                name: 'root',
+                children: []
+            }
+        }
+
+        entries.forEach(entry => {
+            let current = tree.root;
+            const parts = entry.file.split(path.sep);
+
+            parts.forEach((part, i) => {
+                if (current.children == null) current.children = [];
+
+                if (i === parts.length - 1) {
+                    current.children.push({
+                        name: part,
+                        hash: entry.hash,
+                        children: []
+                    });
+
+                    return;
+                }
+
+                const exists = current.children.find((child: any) => child.name === part);
+                if (exists) {
+                    current = exists
+                } else {
+                    const newEntry = {
+                        name: part,
+                        children: []
+                    };
+                    current.children.push(newEntry);
+                    current = newEntry;
+                }
+            });
+        });
+
+        return tree;
     }
 
     add = (hash: string, file: string): void => {
