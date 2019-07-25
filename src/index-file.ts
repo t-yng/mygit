@@ -2,12 +2,12 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as os from 'os';
 
-interface IndexEntry {
+export interface IndexEntry {
     hash: string,
     file: string
 }
 
-export default class Index {
+export class Index {
     private _file: string;
 
     constructor() {
@@ -33,7 +33,10 @@ export default class Index {
             this.write(entries);
         } else {
             let newEntry = `${hash} ${file}`;
-            if(entries.length > 0) newEntry += os.EOL;
+            if(entries.length > 0) {
+                newEntry = os.EOL + newEntry;
+            }
+
             fs.appendFileSync(this._file, newEntry);
         }
     }

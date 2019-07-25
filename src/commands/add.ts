@@ -1,5 +1,5 @@
 import * as objects from '../objects';
-import Index from '../index-file';
+import { Index } from '../index-file';
 
 export const add = (file: string) => {
     // blobオブジェクトを生成

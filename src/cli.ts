@@ -11,10 +11,18 @@ program
   .action(command.add);
 
 program
-.command('cat-file <hash>')
-.action((hash) => {
-  const content = command.catfile(hash);
-  console.log(content);
-});
+  .command('cat-file <hash>')
+  .action((hash) => {
+    const content = command.catfile(hash);
+    console.log(content);
+  });
+
+program
+  .command('commit')
+  .option('-m, --message <message>', 'commit message')
+  .action((options) => {
+    const commit = command.commit(options.message);
+    console.log(commit.hash);
+  });
 
 program.parse(process.argv);
