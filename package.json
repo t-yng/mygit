@@ -19,6 +19,7 @@
   "dependencies": {
     "@types/fs-extra": "^8.0.0",
     "commander": "^2.20.0",
-    "fs-extra": "^8.1.0"
+    "fs-extra": "^8.1.0",
+    "moment": "^2.24.0"
   }
 }
